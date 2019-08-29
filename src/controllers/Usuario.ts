@@ -4,7 +4,7 @@ import Retorno from '../Utils/Retorno';
 import generetaToken from '../Utils/GenerateToken';
 import { isNumber } from 'util';
 import ValidaCpf from '../Utils/ValidaCpf';
-import * as EmailValidator from 'email-validator';
+import { validate } from 'email-validator';
 
 class UsuarioController {
     public async login(req: Request, res: Response): Promise<Response> {
@@ -35,19 +35,16 @@ class UsuarioController {
                     .status(201)
                     .json(Retorno.Sucesso(true, [], 'Cpf invalido, favor passar um cpf valido para realizar o cadastro'));
             }
-            if (!EmailValidator.validate(email)) {
+            if (!validate(email)) {
                 return res
                     .status(201)
                     .json(Retorno.Sucesso(true, [], 'Email não e valido, favor passar um e-mail valido'));
             }
-
             const user = await UsuarioRepository.save({ email, senha, cpf, tipoUsuario });
-            res
-                .status(201)
+            res.status(201)
                 .json(Retorno.Sucesso(true, [...user], 'Usuario cadastrado com sucesso'));
         } catch (error) {
-            return res
-                .status(400)
+            return res.status(400)
                 .json(Retorno.Sucesso(false, [], 'Erro ao realizar cadastro'));
         }
     }
@@ -59,12 +56,10 @@ class UsuarioController {
                 return res.status(400).json(Retorno.Sucesso(false, [], 'Parametro passando não e um numero valido'));
             }
             await UsuarioRepository.update({ idUser: parseInt(req.params.id, null), email, senha, cpf, tipoUsuario });
-            res
-                .status(201)
-                .json(Retorno.Sucesso(true, [], 'Usuario cadastrado com sucesso'));
+            res.status(201)
+                .json(Retorno.Sucesso(true, [], 'Usuario atualizado com sucesso'));
         } catch (error) {
-            return res
-                .status(400)
+            return res.status(400)
                 .json(Retorno.Sucesso(false, [], 'Erro ao realizar atualização'));
         }
     }
@@ -75,8 +70,7 @@ class UsuarioController {
                 return res.status(400).json(Retorno.Sucesso(false, [], 'Parametro passando não e um numero valido'));
             }
             await UsuarioRepository.delete(parseInt(req.params.id, null));
-            return res
-                .status(200)
+            return res.status(200)
                 .json(Retorno.Sucesso(true, [], 'Registro deletado com sucesso'));
         } catch (error) {
             return res
@@ -91,12 +85,10 @@ class UsuarioController {
                 return res.status(400).json(Retorno.Sucesso(false, [], 'Parametro passando não e um numero valido'));
             }
             const user = await UsuarioRepository.readById(parseInt(req.params.id, null));
-            return res
-                .status(200)
+            return res.status(200)
                 .json(Retorno.Sucesso(true, [...user], ''));
         } catch (error) {
-            return res
-                .status(400)
+            return res.status(400)
                 .json(Retorno.Sucesso(false, [], 'Erro ao pesquisar usuario'));
         }
     }
@@ -104,12 +96,10 @@ class UsuarioController {
     public async read(req: Request, res: Response): Promise<Response> {
         try {
             const user = await UsuarioRepository.read();
-            return res
-                .status(200)
+            return res.status(200)
                 .json(Retorno.Sucesso(true, [...user], 'Lista de Usuario'));
         } catch (error) {
-            return res
-                .status(400)
+            return res.status(400)
                 .json(Retorno.Sucesso(false, [], 'Erro ao pesquisar lista de Usuarios'));
         }
     }

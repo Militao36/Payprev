@@ -1,9 +1,9 @@
 import { Router } from 'express';
 const router = Router();
 
-// Middlewares
-import AuthUser from '../Middlewares/AuthUser';
+// Routes
+import Usuario from './Usuario.routes';
 
-router.use(AuthUser);
+router.use(Usuario);
 
 export default router;
