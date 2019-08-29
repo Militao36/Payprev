@@ -7,7 +7,7 @@ class UsuarioRepository {
     public async save(usuario: Usuario): Promise<Usuario[]> {
         const user = await knex('users')
             .insert(usuario);
-        return [{ idUser: user[0], ...usuario }];
+        return [{ idUser: user[0], senha: '***', ...usuario }];
     }
 
     public async update(usuario: Usuario): Promise<boolean> {
@@ -26,7 +26,7 @@ class UsuarioRepository {
 
     public async readById(idUser: number): Promise<Usuario[]> {
         const user = await knex
-            .select<Usuario[]>()
+            .select<Usuario[]>('idUser', 'email', 'cpf', 'tipoUsuario')
             .table('users')
             .where('idUser', '=', idUser);
         return user;
@@ -34,7 +34,7 @@ class UsuarioRepository {
 
     public async readByEmail(email: string): Promise<Usuario[]> {
         const user = await knex
-            .select<Usuario[]>()
+            .select<Usuario[]>('idUser', 'email', 'cpf', 'tipoUsuario')
             .table('users')
             .where('email', '=', email);
         return user;
@@ -42,7 +42,7 @@ class UsuarioRepository {
 
     public async readByCpf(cpf: string): Promise<Usuario[]> {
         const user = await knex
-            .select<Usuario[]>()
+            .select<Usuario[]>('idUser', 'email', 'cpf', 'tipoUsuario')
             .table('users')
             .where('cpf', '=', cpf);
         return user;
@@ -50,7 +50,7 @@ class UsuarioRepository {
 
     public async read(): Promise<Usuario[]> {
         const user = await knex
-            .select<Usuario[]>()
+            .select<Usuario[]>('idUser', 'email', 'cpf', 'tipoUsuario')
             .table('users');
         return user;
     }
