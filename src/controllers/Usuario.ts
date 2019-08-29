@@ -3,6 +3,8 @@ import UsuarioRepository from '../Repositories/UsuarioRepository';
 import Retorno from '../Utils/Retorno';
 import generetaToken from '../Utils/GenerateToken';
 import { isNumber } from 'util';
+import ValidaCpf from '../Utils/ValidaCpf';
+import * as EmailValidator from 'email-validator';
 
 class UsuarioController {
     public async login(req: Request, res: Response): Promise<Response> {
@@ -28,6 +30,17 @@ class UsuarioController {
     public async cadastrar(req: Request, res: Response): Promise<Response> {
         try {
             const { email, senha, cpf, tipoUsuario } = req.body;
+            if (!ValidaCpf(cpf)) {
+                return res
+                    .status(201)
+                    .json(Retorno.Sucesso(true, [], 'Cpf invalido, favor passar um cpf valido para realizar o cadastro'));
+            }
+            if (!EmailValidator.validate(email)) {
+                return res
+                    .status(201)
+                    .json(Retorno.Sucesso(true, [], 'Email não e valido, favor passar um e-mail valido'));
+            }
+
             const user = await UsuarioRepository.save({ email, senha, cpf, tipoUsuario });
             res
                 .status(201)
@@ -90,7 +103,6 @@ class UsuarioController {
 
     public async read(req: Request, res: Response): Promise<Response> {
         try {
-
             const user = await UsuarioRepository.read();
             return res
                 .status(200)

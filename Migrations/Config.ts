@@ -1,6 +1,4 @@
-import knex from 'knex';
-
-export default knex({
+export default {
     client: 'mysql',
     connection: {
         host: '127.0.0.1',
@@ -8,4 +6,4 @@ export default knex({
         password: 'Matheus@147sa',
         database: 'payprev',
     },
-});
+};
