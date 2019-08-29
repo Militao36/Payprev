@@ -9,7 +9,7 @@ const Admin = async (req: Request, res: Response, next: () => void) => {
     if (user[0].tipoUsuario === TipoUsuario.ADMIN) {
         return next();
     }
-    return res.status(401).json(Retorno.Sucesso(false, [], 'Esse usuário não tem acesso'));
+    return res.status(403).json(Retorno.Sucesso(false, [], 'Esse usuário não tem acesso'));
 };
 
 export default Admin;
