@@ -3,8 +3,9 @@ import UsuarioRepository from '../Repositories/UsuarioRepository';
 import Retorno from '../Utils/Retorno';
 import generetaToken from '../Utils/GenerateToken';
 import { isNumber } from 'util';
-import ValidaCpf from '../Utils/ValidaCpf';
-import { validate } from 'email-validator';
+
+// TODO ainda falta eu validar a funcao atualizar pois, só validei o começo
+// TODO é também falta validar o cpf para que fica apenas com numeros sem caracteres
 
 class UsuarioController {
     public async login(req: Request, res: Response): Promise<Response> {
@@ -19,8 +20,7 @@ class UsuarioController {
         }
 
         if (user[0].senha !== senha) {
-            return res
-                .status(401)
+            return res.status(401)
                 .json(Retorno.Sucesso(false, [], 'Senha invalida'));
         }
         user[0].senha = '*******';
@@ -30,17 +30,13 @@ class UsuarioController {
     public async cadastrar(req: Request, res: Response): Promise<Response> {
         try {
             const { email, senha, cpf, tipoUsuario } = req.body;
-            if (!ValidaCpf(cpf)) {
-                return res
-                    .status(201)
-                    .json(Retorno.Sucesso(true, [], 'Cpf invalido, favor passar um cpf valido para realizar o cadastro'));
+            const body = { email, senha, cpf, tipoUsuario };
+            const validacoes = await UsuarioRepository.validacoes(body);
+            if (validacoes.length > 0) {
+                res.status(400)
+                    .json(Retorno.Sucesso(true, [...validacoes], 'O cadastro não passou em algumas validações'));
             }
-            if (!validate(email)) {
-                return res
-                    .status(201)
-                    .json(Retorno.Sucesso(true, [], 'Email não e valido, favor passar um e-mail valido'));
-            }
-            const user = await UsuarioRepository.save({ email, senha, cpf, tipoUsuario });
+            const user = await UsuarioRepository.save(body);
             res.status(201)
                 .json(Retorno.Sucesso(true, [...user], 'Usuario cadastrado com sucesso'));
         } catch (error) {
