@@ -81,6 +81,14 @@ class UsuarioRepository {
         if (usuario.senha.length < 6) {
             erros.push('A senha deve ser mais ou igual a 6 caracteres');
         }
+
+        // Ahh coloquei desse jeito pq com || dava um erro no tslint, funcionou então pode deixar assim
+        if (usuario.tipoUsuario !== 'ADMIN') {
+            if (usuario.tipoUsuario !== 'COMUM') {
+                erros.push('O tipo de usuario passado e inválido!');
+            }
+        }
+
         return erros;
     }
 

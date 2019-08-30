@@ -34,8 +34,8 @@ class UsuarioController {
 
             const validacoes = await UsuarioRepository.validacoes(body, false);
             if (validacoes.length > 0) {
-                res.status(400)
-                    .json(Retorno.Sucesso(true, [...validacoes], 'O cadastro não passou em algumas validações'));
+                return res.status(400)
+                    .json(Retorno.Sucesso(false, [...validacoes], 'O cadastro não passou em algumas validações'));
             }
             const user = await UsuarioRepository.save(body);
             res.status(201)

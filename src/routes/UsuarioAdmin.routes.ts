@@ -10,12 +10,11 @@ import MiddlewareAdmin from '../Middlewares/MiddlewareAdmin';
 
 // Rotas para realizar login
 router.post('/Usuario/login', UsuarioController.login);
+// Rota para realizar o cadastro
+router.post('/Usuario/cadastro', UsuarioController.cadastrar);
 
 // Rotas inserir usuario do github no banco de dados, apenas adm
 router.get('/Usuario/admin/user/:nome', [AuthUser, MiddlewareAdmin], UsuarioController.cadastrarUsuarioGit);
-
-// Rota para realizar o cadastro
-router.post('/Usuario', UsuarioController.cadastrar);
 
 // Rotas para manipular os usuários cadastrados
 router.put('/Usuario/admin/:id', [AuthUser, MiddlewareAdmin], UsuarioController.atualizar);
