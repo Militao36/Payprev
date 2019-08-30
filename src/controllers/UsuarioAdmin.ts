@@ -6,7 +6,6 @@ import { isNumber } from 'util';
 import RemoveCharCPf from '../Utils/RetirarCharCpf';
 import axios from 'axios';
 
-import { UserGit } from '../interfaces/UserGit';
 import UserGitRepository from '../Repositories/UsuariosGitRepository';
 
 // TODO ainda falta eu validar a funcao atualizar pois, só validei o começo

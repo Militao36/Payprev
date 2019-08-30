@@ -26,7 +26,7 @@ class ListaUserGit {
     }
 
     // Metodos para adicionar usuarios na listas
-    public async addUserLista(nomeLista: string, login: string): Promise<ListaUser[] | string> {
+    public async addUserLista(nomeLista: string, login: string): Promise<string> {
         const getLista = await knex('lista')
             .select<Lista[]>()
             .where('nameLista', '=', nomeLista);
@@ -52,14 +52,7 @@ class ListaUserGit {
 
         const idLista = getLista[0].idLista;
         await knex('users_listas').insert({ idLista, idUser: getUser[0].idUserGit });
-        const lista = await knex
-            .select<ListaUser[]>()
-            .table('users_listas')
-            .innerJoin('lista', 'users_listas.idLista', 'lista.idLista')
-            .innerJoin('user_git', 'users_listas.idUser', 'user_git.idUserGit')
-            .where('users_listas.idLista', '=', idLista)
-            .andWhere('users_listas.idUser', '=', getUser[0].idUserGit);
-        return lista;
+        return `Usuário adicionado na lista: ${getLista[0].nameLista}`;
     }
 
     public async deleteUserLista(nomeLista: string, login: string): Promise<string> {
@@ -124,7 +117,7 @@ class ListaUserGit {
         return `${tags.length > 1 ? 'Tags adicionadas ao usuário' : 'Tag adicionada no usuário'} `;
     }
 
-    public async getListas() {
+    public async getListas(): Promise<object> {
         const listas = {};
         const getLista = await knex.select<Lista[]>().table('lista');
 
