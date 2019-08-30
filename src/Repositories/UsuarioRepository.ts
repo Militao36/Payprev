@@ -77,6 +77,7 @@ class UsuarioRepository {
         if (await this.userCpfExists(usuario.cpf)) {
             erros.push('Já tem um usuário cadastrado com esse cpf');
         }
+
         if (usuario.senha.length < 6) {
             erros.push('A senha deve ser mais ou igual a 6 caracteres');
         }

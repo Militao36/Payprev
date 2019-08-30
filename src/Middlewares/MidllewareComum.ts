@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { TipoUsuario } from '../interfaces/Usuario.interface';
+import { TipoUsuario } from '../enum/TipoUsuario';
 import UsuarioRepository from '../Repositories/UsuarioRepository';
 import Retorno from '../Utils/Retorno';
 
@@ -12,4 +12,4 @@ const Comum = async (req: Request, res: Response, next: () => void) => {
     return res.status(403).json(Retorno.Sucesso(false, [], 'Esse usuário não tem acesso'));
 };
 
-export default Comum
+export default Comum;

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { TipoUsuario } from '../interfaces/Usuario.interface';
 import UsuarioRepository from '../Repositories/UsuarioRepository';
 import Retorno from '../Utils/Retorno';
+import { TipoUsuario } from '../enum/TipoUsuario';
 
 const Admin = async (req: Request, res: Response, next: () => void) => {
     const idUser = req.body.userId as number;

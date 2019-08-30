@@ -2,7 +2,21 @@ import { Request, Response } from 'express';
 import ListasUserGit from '../Repositories/ListasUserGit';
 import Retorno from '../Utils/Retorno';
 import { isNumber } from 'util';
+import UsuarioRepository from '../Repositories/UsuarioRepository';
+
 class UsuarioComumController {
+    // Listagem usuarios github
+    public async getAllUserGit(req: Request, res: Response): Promise<Response> {
+        try {
+            const user = await UsuarioRepository.read();
+            return res.status(200)
+                .json(Retorno.Sucesso(true, [...user], 'Lista de Usuarios'));
+        } catch (error) {
+            return res.status(400)
+                .json(Retorno.Sucesso(false, [], 'Erro ao pesquisar lista de Usuarios'));
+        }
+    }
+
     public async criarLista(req: Request, res: Response): Promise<Response> {
         try {
             const { nameLista } = req.body;

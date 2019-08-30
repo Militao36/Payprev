@@ -2,7 +2,7 @@ import { Router } from 'express';
 const router = Router();
 
 // Routes
-import Usuario from './Usuario.routes';
+import Usuario from './UsuarioAdmin.routes';
 
 router.use(Usuario);
 

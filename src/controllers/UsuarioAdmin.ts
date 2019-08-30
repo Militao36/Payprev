@@ -8,9 +8,6 @@ import axios from 'axios';
 
 import UserGitRepository from '../Repositories/UsuariosGitRepository';
 
-// TODO ainda falta eu validar a funcao atualizar pois, só validei o começo
-// TODO é também falta validar o cpf para que fica apenas com numeros sem caracteres
-
 class UsuarioController {
     public async login(req: Request, res: Response): Promise<Response> {
         const { email, senha } = req.body;
@@ -33,8 +30,7 @@ class UsuarioController {
     public async cadastrar(req: Request, res: Response): Promise<Response> {
         try {
             const { email, senha, cpf, tipoUsuario } = req.body;
-            const body = { email, senha, cpf, tipoUsuario };
-            body.cpf = RemoveCharCPf(body.cpf);
+            const body = { email, senha, cpf: RemoveCharCPf(cpf), tipoUsuario };
 
             const validacoes = await UsuarioRepository.validacoes(body, false);
             if (validacoes.length > 0) {
@@ -53,11 +49,11 @@ class UsuarioController {
     public async atualizar(req: Request, res: Response): Promise<Response> {
         try {
             const { email, senha, cpf, tipoUsuario } = req.body;
-            const body = { email, senha, cpf, tipoUsuario };
-            body.cpf = RemoveCharCPf(body.cpf);
+            const body = { email, senha, cpf: RemoveCharCPf(cpf), tipoUsuario };
 
             if (isNumber(req.params.id)) {
-                return res.status(400).json(Retorno.Sucesso(false, [], 'Parametro passando não e um numero valido'));
+                return res.status(400)
+                    .json(Retorno.Sucesso(false, [], 'Parametro passando não e um numero valido'));
             }
 
             const validacoes = await UsuarioRepository.validacoes(body, false);
