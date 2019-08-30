@@ -93,19 +93,31 @@ class UsuarioComumController {
                 .status(201).json(Retorno.Sucesso(true, [], result.toUpperCase()));
         } catch (error) {
             return res.status(400)
-                .json(Retorno.Sucesso(false, [], 'Ocorreu um erro ao excluir usuario na lista'));
+                .json(Retorno.Sucesso(false, [], 'Ocorreu um erro ao adicionar tags no usuário'));
         }
     }
 
     public async getListas(req: Request, res: Response): Promise<Response> {
         try {
 
-            const result = await ListasUserGit.getListas();
+            const result = await ListasUserGit.getListaCadastradas();
             return res
-                .status(201).json(Retorno.Sucesso(true, { ...result }, 'Lista de todas as listas'));
+                .status(201).json(Retorno.Sucesso(true, result, 'Lista de todas as listas'));
         } catch (error) {
             return res.status(400)
-                .json(Retorno.Sucesso(false, [], 'Ocorreu um erro ao excluir usuario na lista'));
+                .json(Retorno.Sucesso(false, [], 'Ocorreu um erro ao pesquisar lista'));
+        }
+    }
+
+    public async getListaCompleta(req: Request, res: Response): Promise<Response> {
+        try {
+
+            const result = await ListasUserGit.getListas();
+            return res
+                .status(201).json(Retorno.Sucesso(true, result, 'Lista de todas as listas'));
+        } catch (error) {
+            return res.status(400)
+                .json(Retorno.Sucesso(false, [], 'Ocorreu um erro ao gerar lista completa'));
         }
     }
 }

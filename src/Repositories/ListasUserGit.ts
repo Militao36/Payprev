@@ -25,6 +25,13 @@ class ListaUserGit {
         return listaUser === -1 ? false : true;
     }
 
+    public async getListaCadastradas(): Promise<Lista[]> {
+        const lista = await knex
+            .select<Lista[]>()
+            .table('lista');
+        return lista;
+    }
+
     // Metodos para adicionar usuarios na listas
     public async addUserLista(nomeLista: string, login: string): Promise<string> {
         const getLista = await knex('lista')
