@@ -1,0 +1,151 @@
+import knex from '../config/ConfigDb';
+import { Lista } from '../interfaces/Lista.interface';
+import { ListaUser, ListaUserAll } from '../interfaces/ListaUser.interface';
+import { UserGit } from 'src/interfaces/UserGit';
+
+class ListaUserGit {
+    // metodos para criar, atualizar e deletar listas;
+    public async createLista(lista: Lista): Promise<boolean> {
+        const listaUser = await knex('lista')
+            .insert(lista);
+        return listaUser[0] !== -1 ? true : false;
+    }
+
+    public async updateLista(lista: Lista): Promise<boolean> {
+        const listaUser = await knex('lista')
+            .update(lista)
+            .where('idLista', '=', lista.idLista);
+        return listaUser === -1 ? false : true;
+    }
+
+    public async deleteLista(idLista: number): Promise<boolean> {
+        const listaUser = await knex('lista')
+            .delete()
+            .where('idLista', '=', idLista);
+        return listaUser === -1 ? false : true;
+    }
+
+    // Metodos para adicionar usuarios na listas
+    public async addUserLista(nomeLista: string, login: string): Promise<ListaUser[] | string> {
+        const getLista = await knex('lista')
+            .select<Lista[]>()
+            .where('nameLista', '=', nomeLista);
+
+        const getUser = await knex('user_git')
+            .select<UserGit[]>()
+            .where('login', '=', login);
+
+        if (getUser.length === 0) {
+            return 'Usuario passado não existe';
+        }
+        if (getLista.length === 0) {
+            return 'Está lista não existe';
+        }
+
+        const getUserLista = await knex('users_listas').select()
+            .where('idUser', '=', getUser[0].idUserGit)
+            .andWhere('idLista', '=', getLista[0].idLista);
+
+        if (getUserLista.length > 0) {
+            return 'Esse usuário já se encontra nesta lista';
+        }
+
+        const idLista = getLista[0].idLista;
+        await knex('users_listas').insert({ idLista, idUser: getUser[0].idUserGit });
+        const lista = await knex
+            .select<ListaUser[]>()
+            .table('users_listas')
+            .innerJoin('lista', 'users_listas.idLista', 'lista.idLista')
+            .innerJoin('user_git', 'users_listas.idUser', 'user_git.idUserGit')
+            .where('users_listas.idLista', '=', idLista)
+            .andWhere('users_listas.idUser', '=', getUser[0].idUserGit);
+        return lista;
+    }
+
+    public async deleteUserLista(nomeLista: string, login: string): Promise<string> {
+        // abaixo irei realizar algumas verificações,
+        // para ver se existe a lista e o usuarios passados;
+        const getLista = await knex('lista')
+            .select<Lista[]>()
+            .where('nameLista', '=', nomeLista);
+
+        const getUser = await knex('user_git')
+            .select<UserGit[]>()
+            .where('login', '=', login);
+
+        if (getUser.length === 0) {
+            return 'Usuario passado não existe';
+        }
+
+        if (getLista.length === 0) {
+            return 'Está lista não existe';
+        }
+
+        const getUserLista = await knex('users_listas').select<ListaUser[]>()
+            .where('idUser', '=', getUser[0].idUserGit)
+            .andWhere('idLista', '=', getLista[0].idLista);
+
+        if (getUserLista.length === 0) {
+            return 'O usuário não existente na lista';
+        }
+
+        await await knex('users_listas')
+            .delete()
+            .where('idListaUser', '=', getUserLista[0].idListaUser);
+        return 'Deletado com sucesso';
+    }
+
+    public async addTags(nomeLista: string, login: string, tags: string[]): Promise<string> {
+        const getLista = await knex('lista')
+            .select<Lista[]>()
+            .where('nameLista', '=', nomeLista);
+
+        const getUser = await knex('user_git')
+            .select<UserGit[]>()
+            .where('login', '=', login);
+
+        if (getUser.length === 0) {
+            return 'Usuario passado não existe';
+        }
+
+        if (getLista.length === 0) {
+            return 'Está lista não existe';
+        }
+
+        const getUserLista = await knex('users_listas').select<ListaUser[]>()
+            .where('idUser', '=', getUser[0].idUserGit)
+            .andWhere('idLista', '=', getLista[0].idLista);
+
+        if (getUserLista.length === 0) {
+            return 'O usuário não existente na lista';
+        }
+
+        await knex('users_listas').update({ tags: [...getUserLista[0].tags, ...tags] });
+        return `${tags.length > 1 ? 'Tags adicionadas ao usuário' : 'Tag adicionada no usuário'} `;
+    }
+
+    public async getListas() {
+        const listas = {};
+        const getLista = await knex.select<Lista[]>().table('lista');
+
+        for (const item of getLista) {
+            const getUser = await knex
+                .from('users_listas')
+                .select<ListaUserAll[]>()
+                .innerJoin('user_git', 'users_listas.idUser', 'user_git.idUserGit')
+                .where('users_listas.idLista', '=', item.idLista);
+            const listaUser = [];
+            getUser.forEach((v) => {
+                if (v.idLista === item.idLista) {
+                    listaUser.push({
+                        [getUser[0].login]: { ...v },
+                    });
+                }
+            });
+            listas[item.nameLista] = listaUser;
+        }
+        return listas;
+    }
+}
+
+export default new ListaUserGit();

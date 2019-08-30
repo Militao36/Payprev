@@ -1,5 +1,5 @@
 export interface UserGit {
-    idUser?: number;
+    idUserGit?: number;
     login: string;
     name: string;
     bio: string;
