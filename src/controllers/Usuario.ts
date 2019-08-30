@@ -3,6 +3,11 @@ import UsuarioRepository from '../Repositories/UsuarioRepository';
 import Retorno from '../Utils/Retorno';
 import generetaToken from '../Utils/GenerateToken';
 import { isNumber } from 'util';
+import RemoveCharCPf from '../Utils/RetirarCharCpf';
+import axios from 'axios';
+
+import { UserGit } from '../interfaces/UserGit';
+import UserGitRepository from '../Repositories/UsuariosGitRepository';
 
 // TODO ainda falta eu validar a funcao atualizar pois, só validei o começo
 // TODO é também falta validar o cpf para que fica apenas com numeros sem caracteres
@@ -18,7 +23,6 @@ class UsuarioController {
                 .status(401)
                 .json(Retorno.Sucesso(false, [], 'Usuario não encontrado/Não autorizado'));
         }
-
         if (user[0].senha !== senha) {
             return res.status(401)
                 .json(Retorno.Sucesso(false, [], 'Senha invalida'));
@@ -31,7 +35,9 @@ class UsuarioController {
         try {
             const { email, senha, cpf, tipoUsuario } = req.body;
             const body = { email, senha, cpf, tipoUsuario };
-            const validacoes = await UsuarioRepository.validacoes(body);
+            body.cpf = RemoveCharCPf(body.cpf);
+
+            const validacoes = await UsuarioRepository.validacoes(body, false);
             if (validacoes.length > 0) {
                 res.status(400)
                     .json(Retorno.Sucesso(true, [...validacoes], 'O cadastro não passou em algumas validações'));
@@ -48,10 +54,20 @@ class UsuarioController {
     public async atualizar(req: Request, res: Response): Promise<Response> {
         try {
             const { email, senha, cpf, tipoUsuario } = req.body;
+            const body = { email, senha, cpf, tipoUsuario };
+            body.cpf = RemoveCharCPf(body.cpf);
+
             if (isNumber(req.params.id)) {
                 return res.status(400).json(Retorno.Sucesso(false, [], 'Parametro passando não e um numero valido'));
             }
-            await UsuarioRepository.update({ idUser: parseInt(req.params.id, null), email, senha, cpf, tipoUsuario });
+
+            const validacoes = await UsuarioRepository.validacoes(body, false);
+            if (validacoes.length > 0) {
+                res.status(400)
+                    .json(Retorno.Sucesso(true, [...validacoes], 'O cadastro não passou em algumas validações'));
+            }
+
+            await UsuarioRepository.update({ idUser: parseInt(req.params.id, null), ...body });
             res.status(201)
                 .json(Retorno.Sucesso(true, [], 'Usuario atualizado com sucesso'));
         } catch (error) {
@@ -98,6 +114,29 @@ class UsuarioController {
             return res.status(400)
                 .json(Retorno.Sucesso(false, [], 'Erro ao pesquisar lista de Usuarios'));
         }
+    }
+
+    // Comando usuario admin
+    public async cadastrarUsuarioGit(req: Request, res: Response): Promise<Response> {
+        try {
+            const nome = req.params.nome;
+            const result = await axios.get(`https://api.github.com/users/${nome}`);
+            const { login, name, bio, location, html_url } = result.data;
+            const body = { login, name, bio, location, html_url };
+
+            const validacoes = await UserGitRepository.validacoes(body);
+            if (validacoes.length > 0) {
+                res.status(400)
+                    .json(Retorno.Sucesso(true, [...validacoes], 'O cadastro não passou em algumas validações'));
+            }
+            await UserGitRepository.save(body);
+            return res.status(200)
+                .json(Retorno.Sucesso(true, [], 'Usuario do github, inserido no banco de dados'));
+        } catch (error) {
+            return res.status(400)
+                .json(Retorno.Sucesso(false, [], 'Ocorreu um erro ao pesquisar usuario no github, e inserir no banco de dados'));
+        }
+
     }
 }
 

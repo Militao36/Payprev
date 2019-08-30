@@ -34,7 +34,7 @@ class UsuarioRepository {
 
     public async readByEmail(email: string): Promise<Usuario[]> {
         const user = await knex
-            .select<Usuario[]>('idUser', 'email', 'cpf', 'tipoUsuario')
+            .select<Usuario[]>('idUser', 'email', 'cpf', 'tipoUsuario', 'senha')
             .table('users')
             .where('email', '=', email);
         return user;
@@ -55,7 +55,7 @@ class UsuarioRepository {
         return user;
     }
 
-    public async validacoes(usuario: Usuario): Promise<string[]> {
+    public async validacoes(usuario: Usuario, update: boolean): Promise<string[]> {
         const erros: string[] = [];
         if (!ValidaCpf(usuario.cpf)) {
             erros.push('Cpf invalido, favor passar um cpf valido para realizar o cadastro');
@@ -64,8 +64,14 @@ class UsuarioRepository {
             erros.push('Email não e valido, favor passar um e-mail valido');
         }
 
-        if (await this.userEmailExists(usuario.email)) {
-            erros.push('Usuario já cadastro com esse email');
+        if (update) {
+            if (await this.userEmailExists(usuario.email, true)) {
+                erros.push('Usuario já cadastro com esse email');
+            }
+        } else {
+            if (await this.userEmailExists(usuario.email, false)) {
+                erros.push('Usuario já cadastro com esse email');
+            }
         }
 
         if (await this.userCpfExists(usuario.cpf)) {
@@ -77,9 +83,13 @@ class UsuarioRepository {
         return erros;
     }
 
-    private userEmailExists = async (email: string): Promise<boolean> => {
+    private userEmailExists = async (email: string, update: boolean): Promise<boolean | Usuario[]> => {
         const user = await this.readByEmail(email);
-        return user.length > 0 ? true : false;
+        if (!update) {
+            return user.length > 0 ? true : false;
+        } else {
+            return user;
+        }
     }
 
     private userCpfExists = async (cpf: string): Promise<boolean> => {
