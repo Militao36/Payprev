@@ -31,17 +31,17 @@ class UsuarioComumController {
 
     public async updateLista(req: Request, res: Response): Promise<Response> {
         try {
-            const { idLista, nameLista } = req.body;
+            const { nameLista } = req.body;
             if (isNumber(req.params.id)) {
                 return res.status(400)
                     .json(Retorno.Sucesso(false, [], 'Parametro passando não e um numero valido'));
             }
-            await ListasUserGit.updateLista({ idLista, nameLista });
+            await ListasUserGit.updateLista({ idLista: parseInt(req.params.id.toString(), null), nameLista });
             return res
                 .status(201).json(Retorno.Sucesso(true, [], 'Lista atualizada com sucesso'));
         } catch (error) {
             return res.status(400)
-                .json(Retorno.Sucesso(false, [], 'Erro ao criar lista'));
+                .json(Retorno.Sucesso(false, [], 'Ocorrreu um erro ao atualizar a lista'));
         }
     }
 
@@ -88,12 +88,24 @@ class UsuarioComumController {
     public async addTags(req: Request, res: Response): Promise<Response> {
         try {
             const { lista, usuario, tags } = req.body;
-            const result = await ListasUserGit.addTags(lista, usuario, tags);
+            const result = await ListasUserGit.addTags(lista, usuario, tags.split(','));
             return res
                 .status(201).json(Retorno.Sucesso(true, [], result.toUpperCase()));
         } catch (error) {
             return res.status(400)
-                .json(Retorno.Sucesso(false, [], 'Ocorreu um erro ao adicionar tags no usuário'));
+                .json(Retorno.Sucesso(false, [error], 'Ocorreu um erro ao adicionar tags no usuário'));
+        }
+    }
+
+    public async removeTags(req: Request, res: Response): Promise<Response> {
+        try {
+            const { lista, usuario } = req.body;
+            const result = await ListasUserGit.removeTags(lista, usuario, []);
+            return res
+                .status(201).json(Retorno.Sucesso(true, [], result.toUpperCase()));
+        } catch (error) {
+            return res.status(400)
+                .json(Retorno.Sucesso(false, [error], 'Ocorreu um erro ao deletar tags no usuário'));
         }
     }
 

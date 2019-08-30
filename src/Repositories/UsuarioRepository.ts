@@ -65,7 +65,8 @@ class UsuarioRepository {
         }
 
         if (update) {
-            if (await this.userEmailExists(usuario.email, true)) {
+            const exits = await this.userEmailExists(usuario.email, true) as Usuario[];
+            if (exits[0].idUser !== usuario.idUser) {
                 erros.push('Usuario já cadastro com esse email');
             }
         } else {
@@ -74,8 +75,15 @@ class UsuarioRepository {
             }
         }
 
-        if (await this.userCpfExists(usuario.cpf)) {
-            erros.push('Já tem um usuário cadastrado com esse cpf');
+        if (update) {
+            const exits = await this.userCpfExists(usuario.cpf, true);
+            if (exits[0].idUser !== usuario.idUser) {
+                erros.push('Já tem um usuário cadastrado com esse cpf');
+            }
+        } else {
+            if (await this.userCpfExists(usuario.cpf, false)) {
+                erros.push('Já tem um usuário cadastrado com esse cpf');
+            }
         }
 
         if (usuario.senha.length < 6) {
@@ -101,9 +109,14 @@ class UsuarioRepository {
         }
     }
 
-    private userCpfExists = async (cpf: string): Promise<boolean> => {
+    private userCpfExists = async (cpf: string, update: boolean): Promise<boolean | Usuario[]> => {
         const user = await this.readByCpf(cpf);
-        return user.length > 0 ? true : false;
+        if (!update) {
+            return user.length > 0 ? true : false;
+        } else {
+            return user;
+        }
+
     }
 }
 

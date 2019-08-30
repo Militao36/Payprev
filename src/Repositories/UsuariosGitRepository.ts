@@ -4,20 +4,20 @@ import { isNumber } from 'util';
 
 class UsuarioGit {
     public async save(user: UserGit): Promise<boolean> {
-        const userGit = await knex('userGit')
+        const userGit = await knex('user_git')
             .insert(user);
         return isNumber(parseInt(userGit[0].toString(), null));
     }
 
     public async update(user: UserGit): Promise<boolean> {
-        const userGit = await knex('userGit')
+        const userGit = await knex('user_git')
             .update(user)
             .where('idUserGit', '=', user.idUserGit);
         return userGit === -1 ? false : true;
     }
 
     public async delete(idUserGit: number): Promise<boolean> {
-        const user = await knex('userGit')
+        const user = await knex('user_git')
             .delete()
             .where('idUserGit', '=', idUserGit);
         return user === -1 ? false : true;
@@ -26,7 +26,7 @@ class UsuarioGit {
     public async readByLogin(login: string): Promise<UserGit[]> {
         const user = await knex
             .select<UserGit[]>()
-            .table('userGit')
+            .table('user_git')
             .where('login', '=', login);
         return user;
     }

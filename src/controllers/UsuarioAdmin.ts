@@ -56,14 +56,14 @@ class UsuarioController {
                     .json(Retorno.Sucesso(false, [], 'Parametro passando não e um numero valido'));
             }
 
-            const validacoes = await UsuarioRepository.validacoes(body, false);
+            const validacoes = await UsuarioRepository.validacoes({ idUser: parseInt(req.params.id, null), ...body }, true);
             if (validacoes.length > 0) {
-                res.status(400)
+                return res.status(400)
                     .json(Retorno.Sucesso(true, [...validacoes], 'O cadastro não passou em algumas validações'));
             }
 
             await UsuarioRepository.update({ idUser: parseInt(req.params.id, null), ...body });
-            res.status(201)
+            return res.status(201)
                 .json(Retorno.Sucesso(true, [], 'Usuario atualizado com sucesso'));
         } catch (error) {
             return res.status(400)
@@ -129,7 +129,7 @@ class UsuarioController {
                 .json(Retorno.Sucesso(true, [], 'Usuario do github, inserido no banco de dados'));
         } catch (error) {
             return res.status(400)
-                .json(Retorno.Sucesso(false, [], 'Ocorreu um erro ao pesquisar usuario no github, e inserir no banco de dados'));
+                .json(Retorno.Sucesso(false, [error], 'Ocorreu um erro ao pesquisar usuario no github, e inserir no banco de dados'));
         }
 
     }

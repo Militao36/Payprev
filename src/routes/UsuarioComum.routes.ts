@@ -19,6 +19,7 @@ router.delete('/Usuario/comum/lista/:id', [AuthUser, MiddlewareComum], ListaUser
 router.post('/Usuario/comum/adicionar/userListas', [AuthUser, MiddlewareComum], ListaUserGit.addUserLista);
 router.post('/Usuario/comum/deletar/userListas', [AuthUser, MiddlewareComum], ListaUserGit.deleteUserLista);
 router.post('/Usuario/comum/adicionar/tags', [AuthUser, MiddlewareComum], ListaUserGit.addTags);
+router.post('/Usuario/comum/remover/tags', [AuthUser, MiddlewareComum], ListaUserGit.removeTags);
 
 // Acessar listagem de todos user do github
 router.get('/Usuario/comum/getLista/completa', [AuthUser, MiddlewareComum], ListaUserGit.getListaCompleta);

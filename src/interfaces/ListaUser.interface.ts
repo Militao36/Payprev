@@ -2,7 +2,7 @@ export interface ListaUser {
     idListaUser: number;
     idLista: number;
     idUser: number;
-    tags: string[];
+    tags: string;
 }
 
 export interface ListaUserAll {
