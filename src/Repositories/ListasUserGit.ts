@@ -25,6 +25,17 @@ class ListaUserGit {
         return listaUser === -1 ? false : true;
     }
 
+    public async getListaExist(nameLista: string): Promise<boolean> {
+        const lista = await knex.select<Lista[]>()
+            .table('lista')
+            .where('nameLista', '=', nameLista);
+
+        if (lista.length === 0) {
+            return true;
+        }
+        return false;
+    }
+
     public async getListaCadastradas(): Promise<Lista[]> {
         const lista = await knex
             .select<Lista[]>()

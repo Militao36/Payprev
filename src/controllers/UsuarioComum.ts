@@ -20,9 +20,14 @@ class UsuarioComumController {
     public async criarLista(req: Request, res: Response): Promise<Response> {
         try {
             const { nameLista } = req.body;
-            await ListasUserGit.createLista({ nameLista });
+            const lista = await ListasUserGit.getListaExist(nameLista);
+            if (lista) {
+                await ListasUserGit.createLista({ nameLista });
+                return res
+                    .status(201).json(Retorno.Sucesso(true, [], 'Lista criada com sucesso'));
+            }
             return res
-                .status(201).json(Retorno.Sucesso(true, [], 'Lista criada com sucesso'));
+                .status(400).json(Retorno.Sucesso(true, [], 'Já tem uma lista cadastrada com esse nome'));
         } catch (error) {
             return res.status(400)
                 .json(Retorno.Sucesso(false, [], 'Erro ao criar lista'));

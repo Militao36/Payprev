@@ -61,3 +61,82 @@ Após se cadastrar , faça o login é receberá o token de volta, o mesmo dever�
 - **[ GET ]** /Usuario/admin
 
 > Está rota e utilizada para realizar a pesquisa de todos usuários,deve ser feito uma request do tipo `GET` para a API.
+
+<br>
+##Rotas disponivels para o Usuário Comum
+
+- **[ POST ]** /Usuario/comum/lista
+
+> Está rota e utilizada para realizar o cadastro de novas listas, para utilizalá deve se fazer uma requisição `POST`, passando o **JSON** abaixo.
+
+	{
+		"nameLista":"" //String, Obrigatório, Unico
+	}
+
+- **[ PUT ]** /Usuario/comum/lista/:id
+
+> Está rota e utilizada para realizar a atualização de uma lista, para utiliza-la deve se fazer um requisição `PUT`, alterado apenas o `:id` pelo id da lista que quer atualizar.
+
+	{
+		"nameLista":"" //String, Obrigatório, Unico
+	}
+
+- **[ DELETE ]** /Usuario/comum/lista/:id
+
+> Está rota e utilizada para realizar a remoção de uma lista, para utiliza-la deve se fazer um requisição `DELETE`, alterado apenas o `:id` pelo id da lista que quer remover
+
+- **[ GET ]** /Usuario/comum/lista
+
+> Está rota e utilizada para pegar a todas as listas cadastradas, para utilizar deve se fazer uma requisição `GET`.
+
+- **[ POST]** /Usuario/comum/adicionar/userListas
+
+> Está rota e utilizada para adicionar um usuário em uma lista, para usar deve se realizar uma requisição `POST`, passando o JSON abaixo.
+
+	{
+		"lista":"", // Nome da lista que deseja adicionar
+		"usuario":"" // Nome do usuário do github que deseja inserir na lista.
+	}
+
+- **[ POST ]** /Usuario/comum/deletar/userListas
+
+> Está rota e utilizada para remover um usuário em uma lista, para usar deve se realizar uma requisição `POST`, passando o JSON abaixo.
+
+	{
+		"lista":"", // Nome da lista que deseja adicionar
+		"usuario":"" // Nome do usuário do github que deseja inserir na lista.
+	}
+
+- **[ POST ]** /Usuario/comum/adicionar/tags
+
+>Está rota e utilizada para adicionar tags em um usuário na lista, para usar deve se realizar uma requisição `POST`, passando o JSON abaixo.
+
+	{
+		"lista":"", // Nome da lista que deseja adicionar
+		"usuario":"", // Nome do usuário do github que deseja inserir na lista.
+		"tags:":""//Tags para adicionar ao usuário, deve ser separado por virgula
+	}
+
+- ** [ POST ] /Usuario/comum/remover/tags
+
+>Está rota e utilizada para remover tags de um usuário na lista, para usar deve se realizar uma requisição `POST`, passando o JSON abaixo.
+
+	{
+		"lista":"", // Nome da lista que deseja adicionar
+		"usuario":"", // Nome do usuário do github que deseja inserir na lista.
+	}
+
+- **[ GET ]** /Usuario/comum/getLista/completa
+
+>Está rota e utilizada para pegar a listagem de todas as listas com respectivos usuários, que se encontram dentro da mesma, para usar realizar uma requsição do tipo `GET`.
+
+
+
+### Retornos da API
+- Toda a API tem um padrão de retorno, abaixo está o JSON de exemplo, toda a API segue esse padrão de retorno.
+
+		{
+		  "Sucesso": true, // True caso der certo, e false se der errado
+		  "Body": [], // caso sua request retorne algo, ex: Lista de usuários.
+		  "Mensagem": "TAGS ADICIONADAS AO USUÁRIO" // Mensagem de retorno
+		}
