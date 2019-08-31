@@ -43,14 +43,12 @@ Após se cadastrar , faça o login é receberá o token de volta, o mesmo dever�
 
 > Está rota e utilizada para, atualizar o cadastro, de usuários, cadastrados para usar a API. Deve-se relizar uma request do tipo `PUT`, trocando o `:id` para o `id` do usuário cadastrado.
 
-```javascript
  	{
         "email": "", // String, Obrigatório, Único
         "senha": "",// String.
         "cpf": "",// String, Obrigatório, Único
         "tipoUsuario": ""// Enum (ADMIN,COMUM) , Obrigatório.
     }
-```
 
 - **[ DELETE ]** /Usuario/admin/:id
 
