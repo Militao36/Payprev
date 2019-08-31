@@ -53,7 +53,7 @@ class UsuarioController {
             }
             catch (error) {
                 return res.status(400)
-                    .json(Retorno_1.default.Sucesso(false, [], 'Erro ao realizar cadastro'));
+                    .json(Retorno_1.default.Sucesso(false, [error], 'Erro ao realizar cadastro'));
             }
         });
     }
