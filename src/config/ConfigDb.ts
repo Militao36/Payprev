@@ -4,8 +4,8 @@ export default knex({
     client: 'mysql',
     connection: {
         host: '127.0.0.1',
-        user: 'root',
-        password: 'Matheus@147sa',
+        user: process.env.USER,
+        password: process.env.SENHA,
         database: 'payprev',
     },
 });

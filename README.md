@@ -140,3 +140,10 @@ Após se cadastrar , faça o login é receberá o token de volta, o mesmo dever�
 		  "Body": [], // caso sua request retorne algo, ex: Lista de usuários.
 		  "Mensagem": "TAGS ADICIONADAS AO USUÁRIO" // Mensagem de retorno
 		}
+
+### Dúvidas
+- Caso tenha alguma dúvida ou encontre um erro crie um Issues.
+- Email: matheusmoreira3693@gmail.com
+
+#### Configurações adicionais
+- **URL** - 
