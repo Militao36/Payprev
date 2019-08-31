@@ -5,7 +5,7 @@ export default knex({
     connection: {
         host: 'localhost',
         user: 'root',
-        password: 'senhaBMS16!',
+        password: 'Matheus@147sa',
         database: 'payprev',
     },
 });
