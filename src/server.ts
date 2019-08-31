@@ -1,4 +1,4 @@
 import app from './app';
 
 // tslint:disable-next-line: no-console
-app.listen(5000, () => console.log('>>> Server On'));
+app.listen(process.env.PORT, () => console.log('>>> Server On'));
