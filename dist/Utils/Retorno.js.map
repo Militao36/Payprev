@@ -1,1 +1,0 @@
-{"version":3,"file":"Retorno.js","sourceRoot":"","sources":["../../src/Utils/Retorno.ts"],"names":[],"mappings":";;AAAA,MAAM,OAAO;IACF,OAAO,CAAC,OAAgB,EAAE,IAAY,EAAE,QAAgB;QAC3D,OAAO;YACH,OAAO,EAAE,OAAO;YAChB,IAAI,EAAE,IAAI;YACV,QAAQ,EAAE,QAAQ;SACrB,CAAC;IACN,CAAC;CACJ;AAED,kBAAe,IAAI,OAAO,EAAE,CAAC"}
