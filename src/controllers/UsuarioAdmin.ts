@@ -24,7 +24,7 @@ class UsuarioController {
                 .json(Retorno.Sucesso(false, [], 'Senha invalida'));
         }
         user[0].senha = '*******';
-        res.status(201).json(Retorno.Sucesso(true, [{ ...user[0], token: generetaToken(user[0].idUser) }], 'Login efetuado com sucesso'));
+        res.status(200).json(Retorno.Sucesso(true, [{ ...user[0], token: generetaToken(user[0].idUser) }], 'Login efetuado com sucesso'));
     }
 
     public async cadastrar(req: Request, res: Response): Promise<Response> {
@@ -38,7 +38,7 @@ class UsuarioController {
                     .json(Retorno.Sucesso(false, [...validacoes], 'O cadastro não passou em algumas validações'));
             }
             const user = await UsuarioRepository.save(body);
-            res.status(201)
+            res.status(200)
                 .json(Retorno.Sucesso(true, [...user], 'Usuario cadastrado com sucesso'));
         } catch (error) {
             return res.status(400)
@@ -63,7 +63,7 @@ class UsuarioController {
             }
 
             await UsuarioRepository.update({ idUser: parseInt(req.params.id, null), ...body });
-            return res.status(201)
+            return res.status(200)
                 .json(Retorno.Sucesso(true, [], 'Usuario atualizado com sucesso'));
         } catch (error) {
             return res.status(400)
