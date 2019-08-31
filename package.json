@@ -7,7 +7,7 @@
     "dev": "nodemon src/server.ts",
     "build:sucrase": "sucrase ./src -d ./dist --transforms typescript,imports",
     "build:tsc": "tsc",
-    "start": "nodemon src/server.ts"
+    "start": "node ./dist/server.js"
   },
   "dependencies": {
     "axios": "^0.19.0",
