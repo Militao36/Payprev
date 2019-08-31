@@ -34,7 +34,7 @@ class UsuarioRepository {
 
     public async readByEmail(email: string): Promise<Usuario[]> {
         const user = await knex
-            .select<Usuario[]>('idUser', 'email', 'cpf', 'tipoUsuario', 'senha')
+            .select<Usuario[]>()
             .table('users')
             .where('email', '=', email);
         return user;
@@ -66,8 +66,10 @@ class UsuarioRepository {
 
         if (update) {
             const exits = await this.userEmailExists(usuario.email, true) as Usuario[];
-            if (exits[0].idUser !== usuario.idUser) {
-                erros.push('Usuario já cadastro com esse email');
+            if (exits.length > 0) {
+                if (exits[0].idUser !== usuario.idUser) {
+                    erros.push('Usuario já cadastro com esse email');
+                }
             }
         } else {
             if (await this.userEmailExists(usuario.email, false)) {
