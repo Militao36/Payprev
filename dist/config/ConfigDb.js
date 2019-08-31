@@ -7,7 +7,7 @@ const knex_1 = __importDefault(require("knex"));
 exports.default = knex_1.default({
     client: 'mysql',
     connection: {
-        host: '127.0.0.1',
+        host: 'mysql669.umbler.com',
         user: 'buiatchaka',
         password: 'buiatchaka2vezes',
         database: 'payprev',
