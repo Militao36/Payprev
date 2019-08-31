@@ -9,7 +9,7 @@ exports.default = knex_1.default({
     connection: {
         host: 'localhost',
         user: 'root',
-        password: 'Matheus@147sa',
+        password: '',
         database: 'payprev',
     },
 });
