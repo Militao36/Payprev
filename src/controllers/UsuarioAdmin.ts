@@ -67,7 +67,7 @@ class UsuarioController {
                 .json(Retorno.Sucesso(true, [], 'Usuario atualizado com sucesso'));
         } catch (error) {
             return res.status(400)
-                .json(Retorno.Sucesso(false, [], 'Erro ao realizar atualização'));
+                .json(Retorno.Sucesso(false, [error], 'Erro ao realizar atualização'));
         }
     }
 
