@@ -115,28 +115,24 @@ class UsuarioController {
     public async cadastrarUsuarioGit(req: Request, res: Response): Promise<Response> {
         try {
             const nome = req.params.nome;
-            const result = await axios
-                .get(`https://api.github.com/users/${nome}`)
-                .then(async (value) => {
-                    const { login, name, bio, location, html_url } = result.data;
-                    const body = { login, name, bio, location, html_url };
+            const result = await axios.get(`https://api.github.com/users/${nome}`)
 
-                    const validacoes = await UserGitRepository.validacoes(body);
-                    if (validacoes.length > 0) {
-                        return res.status(400)
-                            .json(Retorno.Sucesso(true, [...validacoes], 'O cadastro não passou em algumas validações'));
-                    }
-                    await UserGitRepository.save(body);
-                    return res.status(200)
-                        .json(Retorno.Sucesso(true, [], 'Usuario do github, inserido no banco de dados'));
-                })
-                .catch((err) => {
-                    if (result.status === 400) {
-                        return res.status(400)
-                            .json(Retorno.Sucesso(true, [], 'O usuário do github passado não existe'));
-                    }
-                });
+            const { login, name, bio, location, html_url } = result.data;
+            const body = { login, name, bio, location, html_url };
+
+            const validacoes = await UserGitRepository.validacoes(body);
+            if (validacoes.length > 0) {
+                return res.status(400)
+                    .json(Retorno.Sucesso(true, [...validacoes], 'O cadastro não passou em algumas validações'));
+            }
+            await UserGitRepository.save(body);
+            return res.status(200)
+                .json(Retorno.Sucesso(true, [], 'Usuario do github, inserido no banco de dados'));
         } catch (error) {
+            if (error.message === 'Request failed with status code 404') {
+                return res.status(400)
+                    .json(Retorno.Sucesso(true, [], 'O usuário do github passado não existe'));
+            }
             return res.status(400)
                 .json(Retorno.Sucesso(false, [], 'Ocorreu um erro ao pesquisar usuario no github, e inserir no banco de dados'));
         }
