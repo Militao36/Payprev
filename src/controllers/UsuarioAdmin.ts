@@ -116,12 +116,17 @@ class UsuarioController {
         try {
             const nome = req.params.nome;
             const result = await axios.get(`https://api.github.com/users/${nome}`);
+            if (result.status === 400) {
+                return res.status(400)
+                    .json(Retorno.Sucesso(true, [], 'O usuário do github passado não existe'));
+
+            }
             const { login, name, bio, location, html_url } = result.data;
             const body = { login, name, bio, location, html_url };
 
             const validacoes = await UserGitRepository.validacoes(body);
             if (validacoes.length > 0) {
-                res.status(400)
+                return res.status(400)
                     .json(Retorno.Sucesso(true, [...validacoes], 'O cadastro não passou em algumas validações'));
             }
             await UserGitRepository.save(body);
@@ -129,7 +134,7 @@ class UsuarioController {
                 .json(Retorno.Sucesso(true, [], 'Usuario do github, inserido no banco de dados'));
         } catch (error) {
             return res.status(400)
-                .json(Retorno.Sucesso(false, [error], 'Ocorreu um erro ao pesquisar usuario no github, e inserir no banco de dados'));
+                .json(Retorno.Sucesso(false, [], 'Ocorreu um erro ao pesquisar usuario no github, e inserir no banco de dados'));
         }
 
     }
