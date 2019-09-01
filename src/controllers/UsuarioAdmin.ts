@@ -115,7 +115,7 @@ class UsuarioController {
     public async cadastrarUsuarioGit(req: Request, res: Response): Promise<Response> {
         try {
             const nome = req.params.nome;
-            const result = await axios.get(`https://api.github.com/users/${nome}`)
+            const result = await axios.get(`https://api.github.com/users/${nome}`);
             const { login, name, bio, location, html_url } = result.data;
             const body = { login, name, bio, location, html_url };
 
