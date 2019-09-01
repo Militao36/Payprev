@@ -16,7 +16,8 @@
 
 ### Como usar a API.
 Primeiro você deve se cadastrar na API. 
-Após se cadastrar , faça o login é receberá o token de volta, o mesmo deverá ser usado em todas as requisições ao servidor, apenas no cadastro e login que são dispensaveis.
+Após se cadastrar, faça o login é receberá o token de volta, o mesmo deverá ser usado em todas as requisições ao servidor, apenas no cadastro e login que são dispensaveis.
+Lembrando que existem dois tipos de usuário ADMIN e COMUM, cada rota tem um bloqueio para bloquar caso, o usuário não tenha permissão.
 
 ## Rotas disponivels para o Admin
 
