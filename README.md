@@ -18,7 +18,7 @@
 Primeiro você deve se cadastrar na API. 
 Após se cadastrar , faça o login é receberá o token de volta, o mesmo deverá ser usado em todas as requisições ao servidor, apenas no cadastro e login que são dispensaveis.
 
-###Rotas disponivels para o Admin
+## Rotas disponivels para o Admin
 
 - **[ POST ]**/Usuario/cadastro
 
