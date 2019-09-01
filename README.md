@@ -68,8 +68,8 @@ Após se cadastrar , faça o login é receberá o token de volta, o mesmo dever�
 
 > Está rota e utilizada para realizar a pesquisa de todos usuários,deve ser feito uma request do tipo `GET` para a API.
 
-<br>
-##Rotas disponivels para o Usuário Comum
+
+## Rotas disponivels para o Usuário Comum
 
 - **[ POST ]** /Usuario/comum/lista
 
