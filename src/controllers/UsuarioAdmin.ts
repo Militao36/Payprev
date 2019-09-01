@@ -116,7 +116,10 @@ class UsuarioController {
         try {
             const nome = req.params.nome;
             const result = await axios.get(`https://api.github.com/users/${nome}`)
-
+            if (result.status === 400) {
+                return res.status(400)
+                    .json(Retorno.Sucesso(true, [], '1 - O usuário do github passado não existe'));
+            }
             const { login, name, bio, location, html_url } = result.data;
             const body = { login, name, bio, location, html_url };
 
