@@ -1,7 +1,7 @@
 # Desafio Payprev
 
 #### Configurações iniciais
-- **URL Inicial** - http://desafiopayprev-com-br.umbler.net
+- **URL Inicial** - http://desafiopayprev-com-br.umbler.net / http://179.188.38.17:443
 
 > Todas as requisições devem ser feita com a URL acima como padrão
 
